@@ -23,18 +23,20 @@ public class MailListReader {
     /* el objetivo de esta clase es leer del fichero de texto los emails
     (deserializar) y crear una lista de correos. */
     
+    
     public static List<Mail> read(String fileName) throws FileNotFoundException, IOException{
-        List<Mail> mailList = new ArrayList<Mail>();
+        List<Mail> mailList = new ArrayList<>();
+        Integer id=0;
         try (BufferedReader reader = new BufferedReader(new FileReader(new File(fileName)))) {
             String mail;
             while((mail = reader.readLine()) != null){
                 if(!mail.contains("@")){
-                    
-                }else{
-                    mailList.add(new Mail(mail));
+                    mailList.add(new Mail(id++,mail));
                 }
             }
+            reader.close();
         } catch(FileNotFoundException e){}
+        
         return mailList;
     }
 }

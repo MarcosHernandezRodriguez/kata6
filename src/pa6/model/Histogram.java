@@ -14,17 +14,21 @@ import java.util.Set;
  * @author Marcos
  */
 public class Histogram <T>{
-    Map<T,Integer> map = new HashMap<>();
+    private final Map<T,Integer> map = new HashMap<>();
     
     public Integer get(T key) {
-    return map.get(key);
-
-}
+        return map.get(key);
+    }
+    
     public Set<T> keySet(){
-            return map.keySet();
+        return map.keySet();
     }
     
     public void increment(T key) {
         map.put(key, map.containsKey(key) ? map.get(key) + 1 : 1);
+    }
+
+    public Number getKey() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
