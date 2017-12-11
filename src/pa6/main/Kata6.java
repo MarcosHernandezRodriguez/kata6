@@ -7,6 +7,7 @@ package pa6.main;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import static java.util.stream.DoubleStream.builder;
 import static java.util.stream.IntStream.builder;
@@ -17,6 +18,8 @@ import pa6.model.Mail;
 import pa6.view.HistogramDisplay;
 import pa6.view.HistogramBuilder;
 import pa6.view.MailListReader;
+import pa6.model.Person;
+import pa6.view.DataBaseList;
 
 /**
  *
@@ -39,6 +42,8 @@ public class Kata6 {
     private HistogramBuilder<Mail> builder;
     private Histogram<String> domains;
     private Histogram<Character> letters;
+    private Histogram<Character> gender;
+    private List<Person> people;
     
     private void execute() throws Exception{
         input();
@@ -52,12 +57,21 @@ public class Kata6 {
         builder = new HistogramBuilder<Mail>(mailList);
     }
     
-    private void process(){
+    private void process() throws ClassNotFoundException, SQLException{
         domains = builder.build(new Attribute<Mail, String>() {
         @Override
         public String get(Mail item) {
             return item.getMail().split("@")[1];
         }
+        
+        people = DataBaseList.read();
+        HistogramBuilder<Person> builderPerson = new HistogramBuilder<>(people);
+        gender = builderPerson.build(new Attribute<Person,Character>() {
+        @Override
+        public Character get(Person item) {
+            return item.getGender();
+        }
+     });
     });
         
     letters = builder.build(new Attribute<Mail, Character>() {
@@ -71,6 +85,7 @@ public class Kata6 {
     private void output(){
         new HistogramDisplay(domains, "Dominios").execute();
         new HistogramDisplay (letters,"Primer Caracter").execute();
+        new HistogramDisplay (gender,"Gender").execute();
         histoDisplay.execute();
     }
 }
